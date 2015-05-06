@@ -81,20 +81,24 @@ def max_non_contig(argv)
 end
 
 def max_contig(argv)
-  max = -Float::INFINITY
-  start = finish = 0
+  max = start = finish = 0
   argc = argv.length
+  found_something = false
   while start < argc
     finish = start
     sum = 0
     while finish < argc
       sum += argv[finish]
+      break if sum <= 0
       finish += 1
-      max = sum if sum > max
+      if sum > max
+        found_something = true
+        max = sum
+      end
     end
     start += 1
   end
-  max
+  found_something ? max : argv.max
 end
 
 main
