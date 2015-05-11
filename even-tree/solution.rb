@@ -42,102 +42,15 @@
 # Explanation:
 # On removing edges (1, 3) and (1, 6), we can get the desired result.
 
-require 'set'
+require "hackerrank/graph"
 
 _vertex_count, edge_count = gets.strip.split(" ").map!(&:to_i)
 
 edges = []
 edge_count.times { edges << gets.strip.split(" ").map!(&:to_i) }
 
-class Node
-  attr_accessor :value
-  attr_reader :id, :links
+graph = Hackerrank::Graph.new(&Hackerrank::Graph::Node.method(:new))
 
-  def initialize(id)
-    @id = id
-    @links = Set.new
-  end
-
-  def children
-    @children ||= @links.select { |node| node.id > id }
-  end
-
-  def descendents
-    @descendents ||= children.dup.concat(children.flat_map(&:descendents))
-  end
-
-  def inspect
-    me = "#{id.to_s}:#{subgraph.length}"
-    me.concat(" =>") if children.any?
-    [me].concat(children.map { |node| node.inspect.map { |desc| "  #{desc}" } }.flatten)
-  end
-
-  def link(node)
-    register_link(node)
-    node.register_link(self)
-    reset_cache
-  end
-
-  def parent
-    @parent ||= links.detect { |node| node.id < id }
-  end
-
-  def subgraph
-    [self].concat(descendents)
-  end
-
-  def unlink(node)
-    unregister_link(node)
-    node.unregister_link(self)
-    reset_cache
-  end
-
-  protected
-  def register_link(node)
-    @links << node
-  end
-
-  def unregister_link(node)
-    @links.delete(node)
-  end
-
-  private
-  def reset_cache
-    @children = @descendents = @parent = nil
-  end
-end
-
-class Graph
-  def initialize
-    @nodes = {}
-    @default_proc = Proc.new if block_given?
-  end
-
-  def [](id)
-    node = @nodes[id]
-    return node if node
-    return if @default_proc.nil?
-    @nodes[id] = @default_proc.call(id)
-  end
-
-  def leaves
-    nodes.delete_if { |node| node.links.count != 1 }
-  end
-
-  def nodes
-    @nodes.values
-  end
-
-  def roots
-    nodes.select { |node| !node.parent }
-  end
-
-  def inspect
-    roots.map(&:inspect).join("\n")
-  end
-end
-
-graph = Graph.new(&Node.method(:new))
 edges.each do |vx, vy|
   nx = graph[vx]
   ny = graph[vy]
