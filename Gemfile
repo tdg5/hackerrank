@@ -2,6 +2,6 @@ source "https://rubygems.org"
 
 gemspec
 
-group "development"
+group "development" do
   gem "pry"
 end
