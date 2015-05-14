@@ -20,5 +20,10 @@ module Hackerrank
         alias :should :it
       end
     end
+
+    module Integration
+      module Solutions
+      end
+    end
   end
 end
