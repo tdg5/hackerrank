@@ -5,6 +5,6 @@ guard(:minitest, :all_after_pass => false, :all_on_start => false) do
     Dir["test/integration/solutions/#{m[1]}/*_test.rb"]
   end
   watch(%r{^test/.+_test\.rb$})
-  watch(%r{^test/test_helper\.rb$}) { "test" }
+  watch(%r{^test/.+_helper\.rb$}) { "test" }
 end
 
