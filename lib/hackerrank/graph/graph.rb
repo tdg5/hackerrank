@@ -8,7 +8,7 @@ module Hackerrank::Graph
       options = opts.nil? ? default_options : default_options.merge!(opts)
       @name = options[:name]
       @nodes = {}
-      @default_proc = Proc.new if block_given?
+      @default_proc = block_given? ? Proc.new : Hackerrank::Graph::Node.method(:new)
     end
 
     def [](id)
