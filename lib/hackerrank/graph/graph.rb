@@ -1,6 +1,12 @@
+require "securerandom"
+
 module Hackerrank::Graph
   class Graph
-    def initialize
+    attr_reader :name
+
+    def initialize(opts = nil)
+      options = opts.nil? ? default_options : default_options.merge!(opts)
+      @name = options[:name]
       @nodes = {}
       @default_proc = Proc.new if block_given?
     end
@@ -10,6 +16,10 @@ module Hackerrank::Graph
       return node if node
       return if @default_proc.nil?
       @nodes[id] = @default_proc.call(id)
+    end
+
+    def generate_name
+      SecureRandom.uuid
     end
 
     def leaves
@@ -28,8 +38,12 @@ module Hackerrank::Graph
       nodes.select { |node| !node.parent }
     end
 
-    def inspect
-      roots.map(&:inspect).join("\n")
+    private
+
+    def default_options
+      {
+        :name => generate_name,
+      }
     end
   end
 end

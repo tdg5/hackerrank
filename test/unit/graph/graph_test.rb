@@ -9,7 +9,18 @@ module Hackerrank::Test::Unit::Graph
       subject { Subject }
 
       context "instance" do
-        subject { Subject.new }
+        subject { Subject.new(@opts) }
+
+        context "#initialize" do
+          should "take a name for the graph" do
+            name = :test_graph
+            @opts = {
+              :name => name,
+            }
+            subject
+            assert_equal name, subject.name
+          end
+        end
 
         context "#node?" do
           should "return true if a node with the given ID exists" do
