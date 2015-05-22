@@ -1,16 +1,9 @@
-require "test_helper"
+require "integration_test_helper"
 require "hackerrank/solutions/bytelandian-tours/solution"
 
 module Hackerrank::Test::Integration::Solutions::BytelandianTours
   class SolutionIntegrationTest < Hackerrank::Test::TestCase
     Subject = Hackerrank::Solutions::BytelandianTours
-
-    def pry_me
-      $pryme = true
-      yield
-    ensure
-      $pryme = false
-    end
 
     subject { Subject }
 
@@ -321,6 +314,27 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
 
     def test_name
       "#{self.class.name}-#{name}"
+    end
+  end
+
+  class TestCase4 < Hackerrank::Test::TestCase
+    include Hackerrank::Test::Integration::ExpectedResultAssertion
+    Subject = Hackerrank::Solutions::BytelandianTours
+
+    context "test case 4" do
+      should "output expected results" do
+        assert_expected_results({
+          :processor => Subject,
+          :input => load_fixture("input04.txt"),
+          :expected_output => load_fixture("output04.txt"),
+        })
+      end
+    end
+
+    def fixture_path(fixture_name = nil)
+      return super unless fixture_name
+      full_name = File.join("solutions/bytelandian-tours", fixture_name).to_s
+      super(full_name)
     end
   end
 end
