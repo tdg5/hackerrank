@@ -16,6 +16,10 @@ module Hackerrank::Graph
       nodes.delete_if { |node| node.links.count != 1 }
     end
 
+    def node?(id)
+      @nodes.key?(id)
+    end
+
     def nodes
       @nodes.values
     end

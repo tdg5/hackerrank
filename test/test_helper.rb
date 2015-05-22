@@ -25,5 +25,8 @@ module Hackerrank
       module Solutions
       end
     end
+
+    module Unit
+    end
   end
 end
