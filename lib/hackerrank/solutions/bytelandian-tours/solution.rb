@@ -1,9 +1,14 @@
 require "hackerrank"
 require "hackerrank/graph"
+require "hackerrank/graph/node_extensions/circuitous_trails"
 
 module Hackerrank::Solutions::BytelandianTours
-  def self.evaluate(edges)
-    Solution.new(edges).circuitous_trail_count
+  class Node < Hackerrank::Graph::Node
+    include Hackerrank::Graph::NodeExtensions::CircuitousTrails
+  end
+
+  def self.evaluate(edges, name = nil)
+    Solution.new(edges, name).circuitous_trail_count
   end
 
   def self.process(input_stream = STDIN, output_stream = STDOUT)
@@ -19,8 +24,8 @@ module Hackerrank::Solutions::BytelandianTours
   class Solution
     attr_reader :graph
 
-    def initialize(edges)
-      @graph = Hackerrank::Graph.new(&Hackerrank::Graph::Node.method(:new))
+    def initialize(edges, name = nil)
+      @graph = Hackerrank::Graph.new(:name => name, &Node.method(:new).to_proc)
       edges.each do |vx, vy|
         nx = @graph[vx]
         ny = @graph[vy]

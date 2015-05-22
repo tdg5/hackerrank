@@ -22,49 +22,12 @@ module Hackerrank::Graph
       @descendents ||= children + children.flat_map(&:descendents)
     end
 
-    def circuitous_trails
-      queue = [
-        {
-          :node => self,
-          :path => [],
-          :traversed => Set.new,
-        },
-      ]
-      circuits = Set.new
-      while queue.any?
-        path_data = queue.shift
-        node, path, traversed = path_data.values_at(:node, :path, :traversed)
-
-        path << node
-        traversed << node
-
-        candidates = node.links - traversed
-
-        puts [
-          "node: #{node.id}",
-          "path: #{path.map(&:id).inspect}",
-          "links: #{node.links.map(&:id)}",
-          "traversed: #{traversed.map(&:id).inspect}",
-        ].join(" ") if $DEBUG
-
-        if candidates.none? && node.links.include?(self)
-          circuits << path.push(self)
-          next
-        end
-
-        candidates.each do |candidate|
-          queue << {
-            :node => candidate,
-            :path => path.dup,
-            :traversed => traversed.dup,
-          }
-        end
-      end
-      circuits
-    end
-
     def degree
       @links.length
+    end
+
+    def grand_children
+      @grand_children ||= children.flat_map(&:children)
     end
 
     def inspect
@@ -77,7 +40,7 @@ module Hackerrank::Graph
         paths = paths.dup.push(node.id)
 
         if node.children.none?
-          results.push(paths)
+          results << paths
           next
         end
 
@@ -143,7 +106,11 @@ module Hackerrank::Graph
 
     private
     def reset_cache
-      @children = @descendents = @parent = @ancestors = nil
+      @ancestors =
+      @children =
+      @descendents =
+      @parent =
+      @grand_children = nil
     end
   end
 end

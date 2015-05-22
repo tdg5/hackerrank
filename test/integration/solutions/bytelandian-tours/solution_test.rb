@@ -17,23 +17,23 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
     context "#{Subject.name}#evaluate" do
       context "return expected result" do
         should "example 1" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 1],
             [1, 2],
-          ]))
+          ])
         end
 
         should "example 2" do
-          assert_equal(4, subject.evaluate([
+          assert_circuitous_trail_count(4, [
             [0, 1],
             [1, 2],
             [2, 3],
             [2, 4]
-          ]))
+          ])
         end
 
         should "example 3" do
-          assert_equal(0, subject.evaluate([
+          assert_circuitous_trail_count(0, [
             [0, 3],
             [1, 6],
             [2, 6],
@@ -43,11 +43,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 7],
             [5, 7],
             [5, 6],
-          ]))
+          ])
         end
 
         should "example 4" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 7],
             [0, 9],
             [1, 5],
@@ -57,11 +57,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [3, 6],
             [4, 9],
             [6, 9],
-          ]))
+          ])
         end
 
         should "example 5" do
-          assert_equal(0, subject.evaluate([
+          assert_circuitous_trail_count(0, [
             [0, 3],
             [0, 6],
             [1, 5],
@@ -71,11 +71,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [6, 7],
             [7, 9],
             [8, 9],
-          ]))
+          ])
         end
 
         should "example 6" do
-          assert_equal(4, subject.evaluate([
+          assert_circuitous_trail_count(4, [
             [0, 4],
             [0, 2],
             [1, 2],
@@ -85,11 +85,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [3, 7],
             [5, 7],
             [5, 9],
-          ]))
+          ])
         end
 
         should "example 7" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 2],
             [1, 6],
             [1, 2],
@@ -99,11 +99,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 8],
             [5, 9],
             [7, 8],
-          ]))
+          ])
         end
 
         should "example 8" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 9],
             [1, 3],
             [1, 9],
@@ -113,11 +113,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 9],
             [6, 7],
             [7, 8],
-          ]))
+          ])
         end
 
         should "example 9" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 4],
             [0, 1],
             [0, 6],
@@ -127,11 +127,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [3, 6],
             [3, 9],
             [6, 7],
-          ]))
+          ])
         end
 
         should "example 10" do
-          assert_equal(2, subject.evaluate([
+          assert_circuitous_trail_count(2, [
             [0, 2],
             [0, 6],
             [1, 6],
@@ -141,11 +141,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 7],
             [5, 8],
             [7, 9],
-          ]))
+          ])
         end
 
         should "example 11" do
-          assert_equal(4, subject.evaluate([
+          assert_circuitous_trail_count(4, [
             [0, 6],
             [1, 5],
             [2, 6],
@@ -155,11 +155,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 5],
             [5, 9],
             [6, 9],
-          ]))
+          ])
         end
 
         should "example 12" do
-          assert_equal(0, subject.evaluate([
+          assert_circuitous_trail_count(0, [
             [0, 3],
             [0, 9],
             [1, 2],
@@ -169,12 +169,12 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
             [4, 7],
             [4, 8],
             [6, 7],
-          ]))
+          ])
         end
       end
 
       should "example 13" do
-        assert_equal(0, subject.evaluate([
+        assert_circuitous_trail_count(0, [
           [0, 7],
           [1, 3],
           [1, 9],
@@ -184,11 +184,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [5, 6],
           [6, 8],
           [7, 8],
-        ]))
+        ])
       end
 
       should "example 14" do
-        assert_equal(0, subject.evaluate([
+        assert_circuitous_trail_count(0, [
           [0, 5],
           [0, 6],
           [1, 4],
@@ -198,11 +198,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [3, 9],
           [6, 8],
           [7, 9],
-        ]))
+        ])
       end
 
       should "example 15" do
-        assert_equal(4, subject.evaluate([
+        assert_circuitous_trail_count(4, [
           [0, 5],
           [0, 4],
           [1, 6],
@@ -212,11 +212,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [5, 7],
           [6, 9],
           [8, 9],
-        ]))
+        ])
       end
 
       should "example 16" do
-        assert_equal(8, subject.evaluate([
+        assert_circuitous_trail_count(8, [
           [0, 7],
           [1, 3],
           [1, 7],
@@ -226,11 +226,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [2, 6],
           [5, 7],
           [6, 9],
-        ]))
+        ])
       end
 
       should "example 17" do
-        assert_equal(2, subject.evaluate([
+        assert_circuitous_trail_count(2, [
           [0, 3],
           [0, 6],
           [1, 2],
@@ -240,11 +240,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [4, 9],
           [5, 9],
           [8, 9],
-        ]))
+        ])
       end
 
       should "example 18" do
-        assert_equal(8, subject.evaluate([
+        assert_circuitous_trail_count(8, [
           [0, 2],
           [0, 9],
           [1, 3],
@@ -254,11 +254,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [4, 7],
           [5, 9],
           [6, 7],
-        ]))
+        ])
       end
 
       should "example 19" do
-        assert_equal(12, subject.evaluate([
+        assert_circuitous_trail_count(12, [
           [0, 9],
           [1, 7],
           [2, 7],
@@ -268,11 +268,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [5, 6],
           [5, 9],
           [7, 8],
-        ]))
+        ])
       end
 
       should "example 20" do
-        assert_equal(0, subject.evaluate([
+        assert_circuitous_trail_count(0, [
           [0, 6],
           [1, 7],
           [1, 2],
@@ -282,11 +282,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [4, 6],
           [4, 8],
           [8, 9],
-        ]))
+        ])
       end
 
       should "example 21" do
-        assert_equal(0, subject.evaluate([
+        assert_circuitous_trail_count(0, [
           [0, 3],
           [0, 5],
           [0, 9],
@@ -296,11 +296,11 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [5, 7],
           [6, 8],
           [8, 9],
-        ]))
+        ])
       end
 
       should "example 22" do
-        assert_equal(0, subject.evaluate([
+        assert_circuitous_trail_count(0, [
           [0, 6],
           [1, 6],
           [1, 8],
@@ -310,8 +310,17 @@ module Hackerrank::Test::Integration::Solutions::BytelandianTours
           [4, 5],
           [5, 9],
           [6, 7],
-        ]))
+        ])
       end
+    end
+
+    private
+    def assert_circuitous_trail_count(count, edges)
+      assert_equal(count, subject.evaluate(edges, test_name))
+    end
+
+    def test_name
+      "#{self.class.name}-#{name}"
     end
   end
 end
