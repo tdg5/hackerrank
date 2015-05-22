@@ -1,4 +1,4 @@
-require "hackerrank/graph"
+require "hackerrank/graph/digraph"
 
 module Hackerrank::Solutions::TheQuickestWayUp
   def self.evaluate(edges)
@@ -26,9 +26,19 @@ module Hackerrank::Solutions::TheQuickestWayUp
   class Solution
     attr_reader :graph
 
-    def initialize(edges, move_range = 1..6)
-      @move_range = move_range
-      @graph = Hackerrank::Graph.new
+    DEFAULT_INITIALIZE_OPTIONS = {
+      :graph_size => 100,
+      :move_range => 1..6,
+      :starting_position => 1,
+    }.freeze
+
+    def initialize(edges, options = {})
+      opts = DEFAULT_INITIALIZE_OPTIONS.merge(options)
+      @move_range = opts[:move_range]
+      @graph_size = opts[:graph_size]
+      @starting_position = opts[:starting_position]
+
+      @graph = Hackerrank::Graph::Digraph.new
       edges.each do |vx, vy|
         nx, ny = @graph[vx], @graph[vy]
         nx.link(ny)
@@ -36,32 +46,44 @@ module Hackerrank::Solutions::TheQuickestWayUp
     end
 
     def shortest_path_length(start_node, end_node)
-      hops = 0
-      current_node = start_node
-      while current_node != end_node
-        hops += 1
-        former = current_node.id
-        current_node = find_optimal_move(current_node, end_node)
-        puts "Moving from #{former} to #{current_node.id}" if $DEBUG
-      end
-      hops
+      length = cost_graph[@graph_size].value
+      length.integer? ? length : -1
     end
 
-    def find_optimal_move(node, goal_node)
-      id = node.id
-      optimal_node, optimal_result = node, node.id
-      @move_range.each do |move|
-        candidate = @graph[id + move]
-        return candidate if candidate == goal_node
+    def cost_graph
+      costs = @graph.dup
 
-        candidate = candidate.links.first if candidate.links.any?
+      costs[@starting_position].value = 0
+      (@starting_position + 1).upto(@graph_size) do |idx|
+        costs[idx].value = Float::INFINITY
+      end
 
-        if candidate.id > optimal_result
-          optimal_node = candidate
-          optimal_result = candidate.id
+      start_idx = @starting_position
+      while start_idx
+        working_start_idx = start_idx
+        start_idx = nil
+        working_start_idx.upto(@graph_size) do |idx|
+          next if costs[idx].links.any?
+          candidate_value = costs[idx].value + 1
+          @move_range.each do |offset|
+            break if idx + offset > @graph_size
+            neighbor = costs[idx + offset]
+            if neighbor.children.any?
+              neighbor = neighbor.children.first
+            elsif neighbor.parent
+              neighbor = neighbor.parent
+              should_rewind = true
+            end
+            next if neighbor.value <= candidate_value
+
+            neighbor.value = candidate_value
+            if should_rewind && (start_idx.nil? || neighbor.id < start_idx)
+              start_idx = neighbor.id
+            end
+          end
         end
       end
-      optimal_node
+      costs
     end
   end
 end
