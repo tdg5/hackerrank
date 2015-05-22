@@ -38,6 +38,10 @@ module Hackerrank::Graph
       nodes.select { |node| !node.parent }
     end
 
+    def size
+      @nodes.length
+    end
+
     private
 
     def default_options

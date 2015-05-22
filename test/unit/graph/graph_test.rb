@@ -34,6 +34,15 @@ module Hackerrank::Test::Unit::Graph
             assert_equal false, subject.node?(id)
           end
         end
+
+        context "#size" do
+          should "return the node count of the graph" do
+            assert_equal 0, subject.size
+            count = rand(29)
+            count.times { |i| subject[i] }
+            assert_equal count, subject.size
+          end
+        end
       end
     end
   end
