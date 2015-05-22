@@ -11,6 +11,37 @@ module Hackerrank::Test::Unit::Graph
       context "instance" do
         subject { Subject.new(@opts) }
 
+        context "#dup" do
+          should "create a replica of the receiver" do
+            node_count = rand(29) + 1
+            0.upto(node_count, &subject.method(:[]))
+
+            (rand(10) + 1).times do
+              nodes = subject.nodes
+              first_node = nodes[rand(nodes.size)]
+              nodes.delete(first_node)
+              (rand(5) + 1).times do
+                second_node = nodes[rand(nodes.size)]
+                nodes.delete(second_node)
+                first_node.link(second_node)
+              end
+            end
+
+            clone = subject.dup
+            assert_equal subject.default_proc, clone.default_proc
+            assert_equal subject.name, clone.name
+            assert_equal subject.size, clone.size
+            subject.nodes.each do |node|
+              id = node.id
+              assert_equal true, clone.node?(id)
+              assert_equal subject[id].value, clone[id].value
+              refute_equal subject[id].object_id, clone[id].object_id
+              original_links = subject[id].links.map(&:id).sort
+              assert_equal original_links, clone[id].links.map(&:id).sort
+            end
+          end
+        end
+
         context "#initialize" do
           should "take a name for the graph" do
             name = :test_graph
@@ -31,10 +62,10 @@ module Hackerrank::Test::Unit::Graph
             assert_equal true, yielded
           end
 
-          should "use Node.new by default if no proc given" do
+          should "use default_node_builder by default if no proc given" do
             id = SecureRandom.uuid
-            node = Hackerrank::Graph::Node.new(id)
-            Hackerrank::Graph::Node.expects(:new).with(id).returns(node)
+            default_builder = Subject.default_node_builder
+            Subject.expects(:default_node_builder).returns(default_builder)
             assert_equal id, subject[id].id
           end
         end
@@ -55,7 +86,7 @@ module Hackerrank::Test::Unit::Graph
         context "#size" do
           should "return the node count of the graph" do
             assert_equal 0, subject.size
-            count = rand(29)
+            count = rand(29) + 1
             count.times { |i| subject[i] }
             assert_equal count, subject.size
           end

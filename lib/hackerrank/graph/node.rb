@@ -92,8 +92,9 @@ module Hackerrank::Graph
       nodes.flatten.each do |node|
         register_link(node)
         node.register_link(self)
-        reset_cache
       end
+      reset_cache
+      self
     end
 
     def links
@@ -122,10 +123,13 @@ module Hackerrank::Graph
       [self].concat(descendents)
     end
 
-    def unlink(node)
-      unregister_link(node)
-      node.unregister_link(self)
+    def unlink(*nodes)
+      nodes.flatten.each do |node|
+        unregister_link(node)
+        node.unregister_link(self)
+      end
       reset_cache
+      self
     end
 
     protected
