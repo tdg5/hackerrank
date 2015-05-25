@@ -1,6 +1,5 @@
 require "hackerrank"
 
-module Hackerrank; module Solutions; end; end
 module Hackerrank::Solutions::Euler002
   def self.process(input = STDIN, output = STDOUT)
     count = input.gets.to_i
