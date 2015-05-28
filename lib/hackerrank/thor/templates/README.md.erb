@@ -1,0 +1,67 @@
+<%-
+  challenge = presenter.challenge
+-%>
+# [<%= challenge.name -%>](<%= challenge.url -%>)
+
+<%- if challenge.description.key?(:problem_statement) -%>
+## Problem Statement
+
+<%=
+  challenge.description[:problem_statement].map do |text|
+    challenge.wrap_at_limit(text)
+  end.join("\n\n")
+-%>
+
+<%- end -%>
+
+<%- if challenge.description.key?(:input_format) -%>
+## Input Format
+
+<%=
+  challenge.description[:input_format].map do |text|
+    challenge.wrap_at_limit(text)
+  end.join("\n\n")
+%>
+<%- end -%>
+
+<%- if challenge.description.key?(:output_format) -%>
+## Output Format
+
+<%=
+  challenge.description[:output_format].map do |text|
+    challenge.wrap_at_limit(text)
+  end.join("\n\n")
+%>
+<%- end -%>
+
+<%- if challenge.description.key?(:constraints) -%>
+## Constraints
+
+<%= challenge.description[:constraints].join("\n") %>
+<%- end -%>
+
+<%- if challenge.description.key?(:sample_input) -%>
+## Sample Input
+
+```
+<%= challenge.description[:sample_input].join("\n") %>
+```
+<%- end -%>
+
+<%- if challenge.description.key?(:sample_output) -%>
+## Sample Output
+
+```
+<%= challenge.description[:sample_output].join("\n") %>
+```
+<%- end -%>
+<%- if challenge.description.key?(:explanation) -%>
+
+## Explanation
+
+<%=
+  challenge.description[:explanation].map do |text|
+    challenge.wrap_at_limit(text)
+  end.join("\n\n")
+-%>
+<%- end -%>
