@@ -1,3 +1,4 @@
+require "hackerrank"
 require "hackerrank/graph/digraph"
 
 module Hackerrank::Solutions::TheQuickestWayUp

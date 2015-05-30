@@ -1,5 +1,4 @@
 require "integration_test_helper"
-require "hackerrank"
 require "hackerrank/solutions/the-quickest-way-up/solution"
 
 module Hackerrank::Test::Integration::Solutions::TheQuickestWayUp
