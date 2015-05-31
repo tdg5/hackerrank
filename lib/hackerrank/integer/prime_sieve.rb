@@ -13,7 +13,7 @@ module Hackerrank::Integer
 
     def [](index)
       while index >= offset + size
-        grow || shift
+        @primes.last > size ? (grow || shift) : shift
       end
 
       return @primes.include?(index)
@@ -28,7 +28,7 @@ module Hackerrank::Integer
           yield @primes[index]
           index += 1
         else
-          grow || shift
+          @primes.last > size ? (grow || shift) : shift
         end
       end
     end
@@ -43,7 +43,7 @@ module Hackerrank::Integer
 
     def default_options
       {
-        :initial_size => 10_000,
+        :initial_size => 1000,
         :maximum_size => 10_000_000,
       }
     end
