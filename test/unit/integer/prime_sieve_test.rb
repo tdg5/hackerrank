@@ -13,13 +13,16 @@ module Hackerrank::Test::Integer
 
         context "#[]" do
           should "return true for prime indicies" do
-            PRIMES_UNDER_21K.each { |prime| assert_equal true, subject[prime] }
+            PRIMES_UNDER_21K.each do |prime|
+              assert_equal true, subject[prime], "expected #{prime} to be prime"
+            end
           end
 
           should "return false for composite indicies" do
-            assert_equal false, subject[7 ** 2]
-            assert_equal false, subject[2 ** 10]
-            assert_equal false, subject[1009 * 3]
+            4.upto(PRIMES_UNDER_21K.max + 2) do |num|
+              next if PRIMES_UNDER_21K.include?(num)
+              assert_equal false, subject[num], "expected #{num} to be composite"
+            end
           end
         end
 

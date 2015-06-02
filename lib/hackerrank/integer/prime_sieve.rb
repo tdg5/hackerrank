@@ -4,17 +4,13 @@ module Hackerrank::Integer
       opts = default_options.merge!(options)
       initial_size = opts[:initial_size]
       @maximum_size = opts.fetch(:maximum_size)
-      @primes = [2]
-      @offset = 2
-      @sieve = Array.new(initial_size)
-      @sieve[0] = true
-      falsify_composites
+      @primes = [ 2 ]
+      @offset = 3
+      initialize_sieve(initial_size)
     end
 
     def [](index)
-      while index >= offset + size
-        @primes.last > size ? (grow || shift) : shift
-      end
+      resume while index >= offset + size
 
       return @primes.include?(index)
     end
@@ -28,9 +24,13 @@ module Hackerrank::Integer
           yield @primes[index]
           index += 1
         else
-          @primes.last > size ? (grow || shift) : shift
+          resume
         end
       end
+    end
+
+    def capacity
+      size * 2
     end
 
     def size
@@ -49,47 +49,45 @@ module Hackerrank::Integer
     end
 
     def falsify_composites
-      known_primes = primes.dup
-      min_new_prime_index = 0
-      max_value = offset + size - 1
-      previous_prime = 1
+      applicable_primes = primes.dup
+      # Drop 2
+      applicable_primes.shift
+      index = 0
+      max_value = offset + capacity - 1
       max_sqrt = Math.sqrt(max_value)
 
-      while known_primes.any?
-        prime = known_primes.shift
-        if prime <= max_sqrt
+      while index < size
+        while applicable_primes.any?
+          prime = applicable_primes.shift
+          break if prime > max_sqrt
+
           min_value = (offset / prime.to_f).ceil * prime
-          min_value.step(max_value, prime) do |composite|
-            @sieve[composite - offset] = false
+          min_value += prime if min_value.even?
+          min_value.step(max_value, prime * 2) do |composite|
+            @sieve[(composite - offset) / 2] = false
           end
         end
-        previous_prime = prime
 
-        next if known_primes.any?
+        while applicable_primes.none? && index < size
+          index += 1 and next unless @sieve[index]
 
-        index = min_new_prime_index
-        # Only traverse odd candidates
-        index += 1 if (index + offset) % 2 == 0
-        while index < size
-          if @sieve[index].nil?
-            @sieve[index] = true
-            min_new_prime_index = index + 2
-            new_prime = index + offset
-            known_primes << new_prime
-            @primes << new_prime
-            break
-          end
-          index += 2
+          new_prime = index * 2 + offset
+          applicable_primes << new_prime
+          @primes << new_prime
+          index += 1
+          break
         end
       end
     end
 
     def grow
       return false if size == @maximum_size
-      @offset += size
-      new_size = [size * 2, @maximum_size].min
+      @offset += capacity
+      initialize_sieve([capacity, @maximum_size].min)
+    end
 
-      @sieve.replace(Array.new(new_size))
+    def initialize_sieve(new_size = size)
+      @sieve = Array.new(new_size, true)
       falsify_composites
       true
     end
@@ -98,11 +96,13 @@ module Hackerrank::Integer
       @primes.dup
     end
 
+    def resume
+      @primes.last > capacity && grow || shift
+    end
+
     def shift
-      @sieve.replace(Array.new(size))
-      @offset += size
-      falsify_composites
-      true
+      @offset += capacity
+      initialize_sieve
     end
   end
 end

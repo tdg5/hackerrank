@@ -22,8 +22,8 @@ module Hackerrank::Solutions::Euler007
 
     def prime_generator
       @prime_generator ||= Hackerrank::Integer::PrimeSieve.new({
-        :initial_size => 100,
-        :maximum_size => 5_000_000,
+        :initial_size => 1_024,
+        :maximum_size => 8_388_608,
       })
     end
   end
