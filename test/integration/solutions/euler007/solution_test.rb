@@ -11,6 +11,7 @@ module Hackerrank::Test::Integration::Solutions::Euler007
       10_001 => 104743,
       100_001 => 1299721,
       1_000_001 => 15485867,
+      10_000_001 => 179424691,
     }.freeze
 
     context Subject.name do
