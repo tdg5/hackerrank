@@ -11,16 +11,15 @@ module Hackerrank::Integer
     end
 
     def [](index)
-      resume while index >= offset + size
-
-      return @primes.include?(index)
+      resume while index >= offset + capacity
+      @primes.include?(index)
     end
 
     def each_prime
       return to_enum(__method__) unless block_given?
 
       index = 0
-      loop do
+      while true
         if @primes.length > index
           yield @primes[index]
           index += 1
