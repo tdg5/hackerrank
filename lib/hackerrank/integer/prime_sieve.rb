@@ -2,11 +2,12 @@ module Hackerrank::Integer
   class PrimeSieve
     def initialize(options = {})
       opts = default_options.merge!(options)
-      initial_size = opts[:initial_size]
+      @size = opts[:initial_size]
       @maximum_size = opts.fetch(:maximum_size)
       @primes = [ 2 ]
       @offset = 3
-      initialize_sieve(initial_size)
+      @sieve = Array.new(@size, true)
+      initialize_sieve
     end
 
     def [](index)
@@ -29,17 +30,9 @@ module Hackerrank::Integer
       end
     end
 
-    def capacity
-      size * 2
-    end
-
-    def size
-      @sieve.length
-    end
-
     private
 
-    attr_reader :offset
+    attr_reader :capacity, :offset, :size
 
     def default_options
       {
@@ -87,7 +80,9 @@ module Hackerrank::Integer
     end
 
     def initialize_sieve(new_size = size)
-      @sieve = Array.new(new_size, true)
+      @size = new_size
+      @capacity = @size * 2
+      @sieve.fill(true, 0, @size)
       falsify_composites
       true
     end
