@@ -6,6 +6,7 @@ module Hackerrank::Integer
       @maximum_size = opts.fetch(:maximum_size)
       @primes = [ 2 ]
       @offset = 3
+      @can_grow = true
       @sieve = Array.new(@size, true)
       initialize_sieve
     end
@@ -20,12 +21,9 @@ module Hackerrank::Integer
 
       index = 0
       while true
-        if @primes.length > index
-          yield @primes[index]
-          index += 1
-        else
-          resume
-        end
+        resume while @primes.length <= index
+        yield @primes[index]
+        index += 1
       end
     end
 
@@ -41,39 +39,46 @@ module Hackerrank::Integer
     end
 
     def falsify_composites
-      applicable_primes = primes.dup
       # Drop 2
-      applicable_primes.shift
+      prime_index = 1
       index = 0
       max_value = offset + capacity - 1
-      max_sqrt = Math.sqrt(max_value)
+      max_transposed = ((max_value - offset) / 2.0).ceil
+      max_sqrt = Math.sqrt(max_value).to_i
+      # Exiting state needed to gather uncollected primes
+      traversal_in_progress = true
+      offset_f = offset.to_f
+      half_offset = offset / 2
 
       while index < size
-        while applicable_primes.any?
-          prime = applicable_primes.shift
-          break if prime > max_sqrt
+        index_f = index * 2 + offset_f
+        while prime = @primes[prime_index]
+          break(traversal_in_progress = false) if prime > max_sqrt
+          prime_index += 1
 
-          min_value = (offset / prime.to_f).ceil * prime
-          min_value += prime if min_value.even?
-          min_value.step(max_value, prime * 2) do |composite|
-            @sieve[(composite - offset) / 2] = false
-          end
+          # index_f / prime yields nearest multiple in range. We take the ceil
+          # of this because we want the first one in the range, not the last one
+          # before the range. If we round down, sometimes we won't be able to
+          # distinguish what's in the range and what's before it. If we round
+          # up, we always know it's in the range. We then OR with 1 to ensure
+          # it's the first odd multiple in the range.
+          multiplier = (index_f / prime).ceil - 2 | 1
+          composite = prime * multiplier / 2
+          transposed = composite - half_offset
+          @sieve[transposed] = false while (transposed += prime) < max_transposed
         end
 
-        while applicable_primes.none? && index < size
-          index += 1 and next unless @sieve[index]
-
-          new_prime = index * 2 + offset
-          applicable_primes << new_prime
-          @primes << new_prime
+        while index < size
+          next(index += 1) unless @sieve[index]
+          @primes << index * 2 + offset
           index += 1
-          break
+          break if traversal_in_progress
         end
       end
     end
 
     def grow
-      return false if size == @maximum_size
+      return(@can_grow = false) if size == @maximum_size
       @offset += capacity
       initialize_sieve([capacity, @maximum_size].min)
     end
@@ -91,7 +96,7 @@ module Hackerrank::Integer
     end
 
     def resume
-      @primes.last > capacity && grow || shift
+      @can_grow ? grow : shift
     end
 
     def shift

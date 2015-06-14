@@ -16,14 +16,15 @@ module Hackerrank::Solutions::Euler007
 
   class Solution
     def nth_prime(n)
+      @n = n
       count = 0
       prime_generator.each_prime { |prime| return prime if (count += 1) == n }
     end
 
     def prime_generator
       @prime_generator ||= Hackerrank::Integer::PrimeSieve.new({
-        :initial_size => 1_024,
-        :maximum_size => 8_388_608,
+        :initial_size => 128,
+        :maximum_size => 43_804,
       })
     end
   end
