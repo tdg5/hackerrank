@@ -30,3 +30,19 @@ module Hackerrank
     end
   end
 end
+
+def ruby_prof(name = Time.now.to_f.round(2).to_s, &block)
+  require "ruby-prof"
+  #RubyProf.measure_mode = RubyProf::CPU_TIME
+  result = RubyProf.profile(&block)
+  printer = RubyProf::GraphHtmlPrinter.new(result)
+  File.open("#{name}.html", "w") { |file| printer.print(file) }
+end
+
+def memory_profile(name = Time.now.to_f.round(2).to_s, &block)
+  require "memory_profiler"
+  report = MemoryProfiler.report(&block)
+  File.open("#{name}-memory.txt", "w") { |file| report.pretty_print(file) }
+end
+
+def xshould(*); end

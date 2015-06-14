@@ -3,7 +3,10 @@ source "https://rubygems.org"
 gemspec
 
 group "development" do
+  gem "benchmark-ips"
+  gem "memory_profiler"
   gem "pry"
+  gem "ruby-prof"
 end
 
 group "test" do
